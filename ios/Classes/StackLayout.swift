@@ -53,11 +53,13 @@ class StackLayout: UIStackView {
     
     init() {
         super.init(frame: .zero)
+        super.isUserInteractionEnabled = false
         setupView()
     }
     
     required init(coder: NSCoder) {
         super.init(coder: coder)
+        super.isUserInteractionEnabled = false
         setupView()
     }
     

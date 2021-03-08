@@ -88,6 +88,7 @@ class NativeAdView: GADUnifiedNativeAdView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         button.autoSetDimension(.height, toSize: 30)
+        button.isUserInteractionEnabled = false;
         return button
     }()
     
@@ -236,7 +237,6 @@ private extension NativeAdView {
                 adBodyLbl,
                 actionLayout
             ])
-        layout.isUserInteractionEnabled = false
         contentView.addSubview(layout)
         layout.autoAlignAxis(toSuperviewAxis: .horizontal)
         layout.autoPinEdge(toSuperviewEdge: .leading)
