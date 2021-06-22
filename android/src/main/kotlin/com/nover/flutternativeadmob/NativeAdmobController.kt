@@ -7,7 +7,7 @@ import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.google.android.gms.ads.nativead.NativeAd
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -26,8 +26,8 @@ class NativeAdmobController(
     loading, loadError, loadCompleted
   }
 
-  var nativeAdChanged: ((UnifiedNativeAd?) -> Unit)? = null
-  var nativeAd: UnifiedNativeAd? = null
+  var nativeAdChanged: ((NativeAd?) -> Unit)? = null
+  var nativeAd: NativeAd? = null
     set(value) {
       field = value
       invokeLoadCompleted()
