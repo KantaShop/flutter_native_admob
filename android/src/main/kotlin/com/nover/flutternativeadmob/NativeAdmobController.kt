@@ -54,11 +54,10 @@ class NativeAdmobController(
             adLoader = builder.forNativeAd { nativeAd ->
               this.nativeAd = nativeAd
             }.withAdListener(object : AdListener() {
-              override fun onAdFailedToLoad(p0: LoadAdError) {
-                println("onAdFailedToLoad errorCode = $p0")
+              override fun onAdFailedToLoad(error: LoadAdError) {
+                println("onAdFailedToLoad errorCode = ${error.code}")
                 channel.invokeMethod(LoadState.loadError.toString(), null)
               }
-
             }).build()
           }
           var numberAds: Int? = 1

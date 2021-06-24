@@ -115,7 +115,7 @@ extension NativeAdmobController: GADNativeAdLoaderDelegate {
         channel.invokeMethod(LoadState.loadError.rawValue, arguments: nil)
     }
     
-    
+
 }
 
 class NativeAdmobControllerManager {
