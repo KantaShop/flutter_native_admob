@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.nover.flutternativeadmob
 
 import android.content.Context
@@ -5,8 +7,10 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.View
+import androidx.annotation.NonNull
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -18,25 +22,37 @@ import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
 
-class FlutterNativeAdmobPlugin(
-    private val context: Context,
-    private val messenger: BinaryMessenger
-) : MethodCallHandler {
+class FlutterNativeAdmobPlugin : FlutterPlugin, MethodCallHandler {
+
+  private lateinit var context: Context
+  private lateinit var messenger: BinaryMessenger
 
   enum class CallMethod {
     initController, disposeController, setTestDeviceIds
   }
 
+  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_native_admob")
+    this.context = flutterPluginBinding.applicationContext
+    this.messenger = flutterPluginBinding.binaryMessenger
+    channel.setMethodCallHandler(this)
+    flutterPluginBinding.platformViewRegistry.registerViewFactory(viewType, ViewFactory())
+  }
+
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {}
+
   companion object {
 
-    const val viewType = "native_admob"
+    private const val viewType = "native_admob"
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val messenger = registrar.messenger()
       val channel = MethodChannel(messenger, "flutter_native_admob")
 
-      val instance = FlutterNativeAdmobPlugin(registrar.context(), messenger)
+      val instance = FlutterNativeAdmobPlugin()
+      instance.context = registrar.context()
+      instance.messenger = messenger
       channel.setMethodCallHandler(instance)
 
       // create platform view
@@ -73,14 +89,13 @@ class FlutterNativeAdmobPlugin(
 class ViewFactory : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
   override fun create(context: Context, id: Int, params: Any?): PlatformView {
-    return NativePlatformView(context, id, params)
+    return NativePlatformView(context, params)
   }
 }
 
 class NativePlatformView(
-    context: Context,
-    id: Int,
-    params: Any?
+        context: Context,
+        params: Any?
 ) : PlatformView {
 
   private var controller: NativeAdmobController? = null
